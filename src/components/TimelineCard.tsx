@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, BookOpen, Users, Feather } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface TimelineCardProps {
   number: string;
@@ -43,21 +44,25 @@ const TimelineCard = ({
   }, []);
 
   const cardContent = (mobile?: boolean) => (
-    <div
-      className="card-hover bg-card rounded-lg border border-border overflow-hidden shadow-sm cursor-pointer group"
+    <motion.div
+      className="bg-card rounded-xl border border-border overflow-hidden shadow-sm cursor-pointer group relative"
       onClick={() => setExpanded(!expanded)}
+      whileHover={{ y: -4, boxShadow: "0 20px 40px -12px rgba(0,0,0,0.12)" }}
+      transition={{ duration: 0.3 }}
     >
+      {/* Chapter number badge */}
+      <div className="absolute top-4 left-4 z-20 bg-card/90 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-border shadow-sm">
+        <span className="font-display text-sm font-bold text-accent">{number}</span>
+      </div>
+
       <div className="relative overflow-hidden">
         <img
           src={image}
           alt={title}
-          className={`w-full ${mobile ? "h-36" : "h-48"} object-cover transition-transform duration-500 group-hover:scale-105`}
+          className={`w-full ${mobile ? "h-40" : "h-52"} object-cover transition-transform duration-700 group-hover:scale-110`}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
-        <span className={`absolute bottom-3 left-4 section-number ${mobile ? "text-sm" : "text-lg"} opacity-80`}>
-          {number}
-        </span>
-        <span className="absolute top-3 right-3 bg-primary/80 text-primary-foreground text-xs font-body px-2.5 py-1 rounded-full backdrop-blur-sm">
+        <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
+        <span className="absolute bottom-3 right-4 bg-primary/80 text-primary-foreground text-xs font-body px-2.5 py-1 rounded-full backdrop-blur-sm">
           {period}
         </span>
       </div>
@@ -67,13 +72,12 @@ const TimelineCard = ({
           {title}
         </h3>
 
-        <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2 mb-3">
+        <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2 mb-4">
           {context}
         </p>
 
-        {/* Expand button */}
-        <button className="flex items-center gap-1.5 text-accent text-sm font-medium font-body transition-colors hover:text-accent/80">
-          {expanded ? "Ver menos" : "Ver apuntes completos"}
+        <button className="flex items-center gap-1.5 text-accent text-sm font-medium font-body transition-all hover:gap-2.5">
+          {expanded ? "Ocultar apuntes" : "Leer apuntes completos"}
           <ChevronDown
             className={`w-4 h-4 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
           />
@@ -82,31 +86,37 @@ const TimelineCard = ({
         {/* Expandable content */}
         <div
           className={`grid transition-all duration-500 ease-in-out ${
-            expanded ? "grid-rows-[1fr] opacity-100 mt-4" : "grid-rows-[0fr] opacity-0 mt-0"
+            expanded ? "grid-rows-[1fr] opacity-100 mt-5" : "grid-rows-[0fr] opacity-0 mt-0"
           }`}
         >
           <div className="overflow-hidden">
+            <div className="h-px bg-border mb-5" />
+
             {/* Context */}
-            <div className="mb-4">
-              <div className="flex items-center gap-2 mb-2">
-                <BookOpen className="w-4 h-4 text-accent" />
+            <div className="mb-5">
+              <div className="flex items-center gap-2 mb-2.5">
+                <div className="w-7 h-7 rounded-lg bg-accent/10 flex items-center justify-center">
+                  <BookOpen className="w-3.5 h-3.5 text-accent" />
+                </div>
                 <h4 className="font-display text-sm font-bold text-foreground">Contexto histórico</h4>
               </div>
-              <p className="text-muted-foreground text-sm leading-relaxed pl-6">
+              <p className="text-muted-foreground text-sm leading-relaxed ml-9">
                 {context}
               </p>
             </div>
 
             {/* Characteristics */}
-            <div className="mb-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Feather className="w-4 h-4 text-accent" />
+            <div className="mb-5">
+              <div className="flex items-center gap-2 mb-2.5">
+                <div className="w-7 h-7 rounded-lg bg-accent/10 flex items-center justify-center">
+                  <Feather className="w-3.5 h-3.5 text-accent" />
+                </div>
                 <h4 className="font-display text-sm font-bold text-foreground">Características</h4>
               </div>
-              <ul className="space-y-1.5 pl-6">
+              <ul className="space-y-2 ml-9">
                 {characteristics.map((c, i) => (
-                  <li key={i} className="text-muted-foreground text-sm leading-relaxed flex items-start gap-2">
-                    <span className="text-accent mt-1.5 w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
+                  <li key={i} className="text-muted-foreground text-sm leading-relaxed flex items-start gap-2.5">
+                    <span className="mt-2 w-1.5 h-1.5 rounded-full bg-accent/60 flex-shrink-0" />
                     {c}
                   </li>
                 ))}
@@ -115,15 +125,17 @@ const TimelineCard = ({
 
             {/* Authors */}
             <div>
-              <div className="flex items-center gap-2 mb-2">
-                <Users className="w-4 h-4 text-accent" />
+              <div className="flex items-center gap-2 mb-2.5">
+                <div className="w-7 h-7 rounded-lg bg-accent/10 flex items-center justify-center">
+                  <Users className="w-3.5 h-3.5 text-accent" />
+                </div>
                 <h4 className="font-display text-sm font-bold text-foreground">Autores y obras</h4>
               </div>
-              <div className="space-y-2 pl-6">
+              <div className="space-y-3 ml-9">
                 {authors.map((a, i) => (
-                  <div key={i} className="text-sm">
+                  <div key={i} className="text-sm bg-muted/50 rounded-lg p-3">
                     <span className="font-semibold text-foreground">{a.name}</span>
-                    <span className="text-muted-foreground"> — {a.works}</span>
+                    <p className="text-muted-foreground mt-0.5">{a.works}</p>
                   </div>
                 ))}
               </div>
@@ -131,28 +143,39 @@ const TimelineCard = ({
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 
   return (
     <div
       ref={ref}
-      className={`timeline-card ${visible ? "visible" : ""} flex items-center w-full mb-12 md:mb-16`}
+      className={`timeline-card ${visible ? "visible" : ""} flex items-center w-full mb-8 md:mb-12`}
       style={{ transitionDelay: `${index * 80}ms` }}
     >
       {/* Desktop */}
       <div className={`hidden md:flex w-full items-start ${side === "right" ? "flex-row-reverse" : ""}`}>
-        <div className="w-[calc(50%-2rem)]">{cardContent()}</div>
-        <div className="flex items-center justify-center w-16 relative mt-6">
-          <div className="timeline-dot w-4 h-4 rounded-full z-10 animate-pulse-glow" />
+        <div className="w-[calc(50%-2.5rem)]">{cardContent()}</div>
+        <div className="flex flex-col items-center w-20 relative pt-6">
+          {/* Ornamental connector */}
+          <div className="w-10 h-10 rounded-full bg-card border-2 border-accent/40 flex items-center justify-center z-10 shadow-sm">
+            <span className="font-display text-xs font-bold text-accent">{number}</span>
+          </div>
+          {index < 7 && (
+            <div className="w-px flex-1 min-h-[2rem] border-l border-dashed border-accent/20" />
+          )}
         </div>
-        <div className="w-[calc(50%-2rem)]" />
+        <div className="w-[calc(50%-2.5rem)]" />
       </div>
 
       {/* Mobile */}
       <div className="md:hidden flex items-start w-full">
-        <div className="flex flex-col items-center mr-4 mt-2">
-          <div className="timeline-dot w-3 h-3 rounded-full z-10" />
+        <div className="flex flex-col items-center mr-3 pt-1">
+          <div className="w-8 h-8 rounded-full bg-card border-2 border-accent/40 flex items-center justify-center z-10 shadow-sm flex-shrink-0">
+            <span className="font-display text-[10px] font-bold text-accent">{number}</span>
+          </div>
+          {index < 7 && (
+            <div className="w-px flex-1 min-h-[1rem] border-l border-dashed border-accent/20" />
+          )}
         </div>
         <div className="flex-1">{cardContent(true)}</div>
       </div>
