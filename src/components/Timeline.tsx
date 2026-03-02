@@ -135,7 +135,7 @@ const timelineData = [
       "Auto sacramental: pieza teatral alegórica de tema eucarístico, representada en la fiesta del Corpus Christi.",
     ],
     authors: [
-      { name: "Lope de Vega", works: "Fuenteovejuna, El caballero de Olmedo, El perro del hortelano; escribió más de 400 comedias." },
+      { name: "Lope de Vega", works: "Fuenteovejuna, El caballero de Olmedo, El perro del hortalano; escribió más de 400 comedias." },
       { name: "Pedro Calderón de la Barca", works: "La vida es sueño, El alcalde de Zalamea, El gran teatro del mundo (auto sacramental)." },
       { name: "Tirso de Molina", works: "El burlador de Sevilla (origen del mito de Don Juan), El condenado por desconfiado." },
       { name: "Guillén de Castro", works: "Las mocedades del Cid, que inspiró Le Cid de Corneille." },
@@ -193,12 +193,6 @@ const timelineData = [
 const Timeline = () => {
   return (
     <section className="relative max-w-5xl mx-auto px-4 py-16">
-      {/* Vertical line - desktop */}
-      <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-[2px] -translate-x-1/2 timeline-line-gradient" />
-
-      {/* Vertical line - mobile */}
-      <div className="md:hidden absolute left-[1.35rem] top-0 bottom-0 w-[2px] timeline-line-gradient" />
-
       {timelineData.map((item, i) => (
         <TimelineCard
           key={item.number}
