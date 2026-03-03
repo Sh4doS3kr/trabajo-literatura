@@ -1,4 +1,5 @@
 import TimelineCard from "./TimelineCard";
+import ChapterReveal from "./ChapterReveal";
 
 import medievalImg from "@/assets/medieval.jpg";
 import sigloXvImg from "@/assets/siglo-xv.jpg";
@@ -190,22 +191,39 @@ const timelineData = [
   },
 ];
 
-const Timeline = () => {
+interface TimelineProps {
+  isReady: boolean;
+}
+
+const Timeline = ({ isReady }: TimelineProps) => {
+  if (!isReady) return null;
+
   return (
-    <section className="relative max-w-5xl mx-auto px-4 py-16">
+    <section className="relative max-w-5xl mx-auto px-4 py-8">
       {timelineData.map((item, i) => (
-        <TimelineCard
-          key={item.number}
-          number={item.number}
-          title={item.title}
-          image={item.image}
-          side={i % 2 === 0 ? "left" : "right"}
-          index={i}
-          period={item.period}
-          context={item.context}
-          characteristics={item.characteristics}
-          authors={item.authors}
-        />
+        <div key={item.number}>
+          {/* Chapter reveal divider */}
+          <ChapterReveal
+            number={item.number}
+            title={item.title}
+            period={item.period}
+            index={i}
+            isActive={isReady}
+          />
+
+          {/* Card */}
+          <TimelineCard
+            number={item.number}
+            title={item.title}
+            image={item.image}
+            side={i % 2 === 0 ? "left" : "right"}
+            index={i}
+            period={item.period}
+            context={item.context}
+            characteristics={item.characteristics}
+            authors={item.authors}
+          />
+        </div>
       ))}
     </section>
   );
