@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, BookOpen, Users, Feather } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 interface TimelineCardProps {
-  number: string;
   title: string;
   image: string;
   side: "left" | "right";
@@ -15,7 +14,6 @@ interface TimelineCardProps {
 }
 
 const TimelineCard = ({
-  number,
   title,
   image,
   side,
@@ -29,6 +27,19 @@ const TimelineCard = ({
   const [visible, setVisible] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "center center"],
+  });
+
+  const cardOpacity = useTransform(scrollYProgress, [0, 0.4], [0, 1]);
+  const cardY = useTransform(scrollYProgress, [0, 0.4], [80, 0]);
+  const cardX = useTransform(
+    scrollYProgress,
+    [0, 0.4],
+    [side === "left" ? -40 : 40, 0]
+  );
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -37,32 +48,22 @@ const TimelineCard = ({
           observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.1, rootMargin: "0px 0px -30px 0px" }
+      { threshold: 0.1 }
     );
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
   }, []);
 
   const cardContent = (mobile?: boolean) => (
-    <motion.div
-      className="bg-card rounded-xl border border-border overflow-hidden shadow-sm cursor-pointer group relative"
+    <div
+      className="bg-card rounded-xl border border-border overflow-hidden shadow-sm cursor-pointer group relative transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
       onClick={() => setExpanded(!expanded)}
-      initial={false}
-      whileHover={{ y: -4, boxShadow: "0 20px 40px -12px rgba(0,0,0,0.12)" }}
-      transition={{ duration: 0.3 }}
     >
-      {/* Chapter number badge */}
-      <div className="absolute top-4 left-4 z-20 bg-card/90 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-border shadow-sm">
-        <span className="font-display text-sm font-bold text-accent">{number}</span>
-      </div>
-
       <div className="relative overflow-hidden">
-        <motion.img
+        <img
           src={image}
           alt={title}
-          className={`w-full ${mobile ? "h-40" : "h-52"} object-cover`}
-          whileHover={{ scale: 1.08 }}
-          transition={{ duration: 0.7 }}
+          className={`w-full ${mobile ? "h-40" : "h-52"} object-cover transition-transform duration-700 group-hover:scale-110`}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
         <span className="absolute bottom-3 right-4 bg-primary/80 text-primary-foreground text-xs font-body px-2.5 py-1 rounded-full backdrop-blur-sm">
@@ -95,7 +96,6 @@ const TimelineCard = ({
           <div className="overflow-hidden">
             <div className="h-px bg-border mb-5" />
 
-            {/* Context */}
             <div className="mb-5">
               <div className="flex items-center gap-2 mb-2.5">
                 <div className="w-7 h-7 rounded-lg bg-accent/10 flex items-center justify-center">
@@ -103,12 +103,9 @@ const TimelineCard = ({
                 </div>
                 <h4 className="font-display text-sm font-bold text-foreground">Contexto histórico</h4>
               </div>
-              <p className="text-muted-foreground text-sm leading-relaxed ml-9">
-                {context}
-              </p>
+              <p className="text-muted-foreground text-sm leading-relaxed ml-9">{context}</p>
             </div>
 
-            {/* Characteristics */}
             <div className="mb-5">
               <div className="flex items-center gap-2 mb-2.5">
                 <div className="w-7 h-7 rounded-lg bg-accent/10 flex items-center justify-center">
@@ -126,7 +123,6 @@ const TimelineCard = ({
               </ul>
             </div>
 
-            {/* Authors */}
             <div>
               <div className="flex items-center gap-2 mb-2.5">
                 <div className="w-7 h-7 rounded-lg bg-accent/10 flex items-center justify-center">
@@ -146,46 +142,29 @@ const TimelineCard = ({
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 
   return (
     <div ref={ref} className="mb-8 md:mb-12">
-      <motion.div
-        initial={{ opacity: 0, y: 60, scale: 0.95 }}
-        animate={visible ? { opacity: 1, y: 0, scale: 1 } : {}}
-        transition={{
-          duration: 0.8,
-          delay: 0.1,
-          ease: [0.22, 1, 0.36, 1],
-        }}
-      >
-        {/* Desktop */}
-        <div className={`hidden md:flex w-full items-start ${side === "right" ? "flex-row-reverse" : ""}`}>
-          <div className="w-[calc(50%-2.5rem)]">{cardContent()}</div>
-          <div className="flex flex-col items-center w-20 relative pt-6">
-            <div className="w-10 h-10 rounded-full bg-card border-2 border-accent/40 flex items-center justify-center z-10 shadow-sm">
-              <span className="font-display text-xs font-bold text-accent">{number}</span>
-            </div>
-            {index < 7 && (
-              <div className="w-px flex-1 min-h-[2rem] border-l border-dashed border-accent/20" />
-            )}
-          </div>
-          <div className="w-[calc(50%-2.5rem)]" />
-        </div>
+      {/* Desktop */}
+      <div className={`hidden md:flex w-full items-start ${side === "right" ? "flex-row-reverse" : ""}`}>
+        <motion.div
+          className="w-[calc(50%-1.5rem)]"
+          style={{ opacity: cardOpacity, y: cardY, x: cardX }}
+        >
+          {cardContent()}
+        </motion.div>
+        <div className="w-12" />
+        <div className="w-[calc(50%-1.5rem)]" />
+      </div>
 
-        {/* Mobile */}
-        <div className="md:hidden flex items-start w-full">
-          <div className="flex flex-col items-center mr-3 pt-1">
-            <div className="w-8 h-8 rounded-full bg-card border-2 border-accent/40 flex items-center justify-center z-10 shadow-sm flex-shrink-0">
-              <span className="font-display text-[10px] font-bold text-accent">{number}</span>
-            </div>
-            {index < 7 && (
-              <div className="w-px flex-1 min-h-[1rem] border-l border-dashed border-accent/20" />
-            )}
-          </div>
-          <div className="flex-1">{cardContent(true)}</div>
-        </div>
+      {/* Mobile */}
+      <motion.div
+        className="md:hidden"
+        style={{ opacity: cardOpacity, y: cardY }}
+      >
+        {cardContent(true)}
       </motion.div>
     </div>
   );
