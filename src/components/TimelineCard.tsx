@@ -37,7 +37,7 @@ const TimelineCard = ({
           observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.15, rootMargin: "0px 0px -50px 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -30px 0px" }
     );
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
@@ -47,6 +47,7 @@ const TimelineCard = ({
     <motion.div
       className="bg-card rounded-xl border border-border overflow-hidden shadow-sm cursor-pointer group relative"
       onClick={() => setExpanded(!expanded)}
+      initial={false}
       whileHover={{ y: -4, boxShadow: "0 20px 40px -12px rgba(0,0,0,0.12)" }}
       transition={{ duration: 0.3 }}
     >
@@ -56,10 +57,12 @@ const TimelineCard = ({
       </div>
 
       <div className="relative overflow-hidden">
-        <img
+        <motion.img
           src={image}
           alt={title}
-          className={`w-full ${mobile ? "h-40" : "h-52"} object-cover transition-transform duration-700 group-hover:scale-110`}
+          className={`w-full ${mobile ? "h-40" : "h-52"} object-cover`}
+          whileHover={{ scale: 1.08 }}
+          transition={{ duration: 0.7 }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
         <span className="absolute bottom-3 right-4 bg-primary/80 text-primary-foreground text-xs font-body px-2.5 py-1 rounded-full backdrop-blur-sm">
@@ -147,38 +150,43 @@ const TimelineCard = ({
   );
 
   return (
-    <div
-      ref={ref}
-      className={`timeline-card ${visible ? "visible" : ""} flex items-center w-full mb-8 md:mb-12`}
-      style={{ transitionDelay: `${index * 80}ms` }}
-    >
-      {/* Desktop */}
-      <div className={`hidden md:flex w-full items-start ${side === "right" ? "flex-row-reverse" : ""}`}>
-        <div className="w-[calc(50%-2.5rem)]">{cardContent()}</div>
-        <div className="flex flex-col items-center w-20 relative pt-6">
-          {/* Ornamental connector */}
-          <div className="w-10 h-10 rounded-full bg-card border-2 border-accent/40 flex items-center justify-center z-10 shadow-sm">
-            <span className="font-display text-xs font-bold text-accent">{number}</span>
+    <div ref={ref} className="mb-8 md:mb-12">
+      <motion.div
+        initial={{ opacity: 0, y: 60, scale: 0.95 }}
+        animate={visible ? { opacity: 1, y: 0, scale: 1 } : {}}
+        transition={{
+          duration: 0.8,
+          delay: 0.1,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+      >
+        {/* Desktop */}
+        <div className={`hidden md:flex w-full items-start ${side === "right" ? "flex-row-reverse" : ""}`}>
+          <div className="w-[calc(50%-2.5rem)]">{cardContent()}</div>
+          <div className="flex flex-col items-center w-20 relative pt-6">
+            <div className="w-10 h-10 rounded-full bg-card border-2 border-accent/40 flex items-center justify-center z-10 shadow-sm">
+              <span className="font-display text-xs font-bold text-accent">{number}</span>
+            </div>
+            {index < 7 && (
+              <div className="w-px flex-1 min-h-[2rem] border-l border-dashed border-accent/20" />
+            )}
           </div>
-          {index < 7 && (
-            <div className="w-px flex-1 min-h-[2rem] border-l border-dashed border-accent/20" />
-          )}
+          <div className="w-[calc(50%-2.5rem)]" />
         </div>
-        <div className="w-[calc(50%-2.5rem)]" />
-      </div>
 
-      {/* Mobile */}
-      <div className="md:hidden flex items-start w-full">
-        <div className="flex flex-col items-center mr-3 pt-1">
-          <div className="w-8 h-8 rounded-full bg-card border-2 border-accent/40 flex items-center justify-center z-10 shadow-sm flex-shrink-0">
-            <span className="font-display text-[10px] font-bold text-accent">{number}</span>
+        {/* Mobile */}
+        <div className="md:hidden flex items-start w-full">
+          <div className="flex flex-col items-center mr-3 pt-1">
+            <div className="w-8 h-8 rounded-full bg-card border-2 border-accent/40 flex items-center justify-center z-10 shadow-sm flex-shrink-0">
+              <span className="font-display text-[10px] font-bold text-accent">{number}</span>
+            </div>
+            {index < 7 && (
+              <div className="w-px flex-1 min-h-[1rem] border-l border-dashed border-accent/20" />
+            )}
           </div>
-          {index < 7 && (
-            <div className="w-px flex-1 min-h-[1rem] border-l border-dashed border-accent/20" />
-          )}
+          <div className="flex-1">{cardContent(true)}</div>
         </div>
-        <div className="flex-1">{cardContent(true)}</div>
-      </div>
+      </motion.div>
     </div>
   );
 };
