@@ -2,7 +2,7 @@ import Timeline from "@/components/Timeline";
 import FloatingQuotes from "@/components/FloatingQuotes";
 import FloatingParticles from "@/components/FloatingParticles";
 import ScrollProgress from "@/components/ScrollProgress";
-import HorizontalScrollHero from "@/components/HorizontalScrollHero";
+import { BookOpen, Scroll } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Index = () => {
@@ -11,32 +11,55 @@ const Index = () => {
       <FloatingParticles />
       <ScrollProgress />
 
-      {/* Horizontal scroll hero intro */}
-      <HorizontalScrollHero />
+      {/* Hero header */}
+      <header className="hero-gradient py-24 md:py-32 text-center relative overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+        }} />
 
-      {/* Transition section */}
-      <section className="relative py-20 md:py-28 overflow-hidden">
-        <div className="max-w-3xl mx-auto text-center px-6">
+        <motion.div
+          className="relative z-10 max-w-3xl mx-auto px-6"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8 }}
+            className="flex justify-center mb-8"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
           >
-            <div className="flex items-center justify-center gap-4 mb-8">
-              <div className="w-16 h-px bg-accent/40" />
-              <span className="text-accent text-2xl">✦</span>
-              <div className="w-16 h-px bg-accent/40" />
+            <div className="bg-primary-foreground/10 backdrop-blur-sm rounded-2xl p-5 border border-primary-foreground/20">
+              <Scroll className="w-10 h-10 text-primary-foreground" />
             </div>
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Empieza el viaje
-            </h2>
-            <p className="text-muted-foreground text-lg font-body leading-relaxed">
-              Haz click en cada tarjeta para desplegar los apuntes completos
-            </p>
           </motion.div>
-        </div>
-      </section>
+
+          <h1 className="font-display text-4xl md:text-6xl font-bold text-primary-foreground mb-5 leading-tight">
+            Timeline Literario
+          </h1>
+          <p className="text-primary-foreground/70 text-lg md:text-xl font-body max-w-xl mx-auto leading-relaxed">
+            Un recorrido por los grandes períodos de la literatura española,
+            desde la Edad Media hasta el Romanticismo
+          </p>
+
+          <motion.div
+            className="mt-10 flex items-center justify-center gap-3 text-primary-foreground/50 text-sm font-body"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+          >
+            <BookOpen className="w-4 h-4" />
+            <span>Haz click en cada tarjeta para ver los apuntes</span>
+          </motion.div>
+
+          {/* Decorative bottom ornament */}
+          <div className="mt-10 flex items-center justify-center gap-3">
+            <div className="w-12 h-px bg-primary-foreground/20" />
+            <span className="text-primary-foreground/30 text-lg">✦</span>
+            <div className="w-12 h-px bg-primary-foreground/20" />
+          </div>
+        </motion.div>
+      </header>
 
       {/* Timeline */}
       <div className="relative z-10">
@@ -47,25 +70,15 @@ const Index = () => {
       <FloatingQuotes />
 
       {/* Footer */}
-      <footer className="relative z-10 text-center py-20 border-t border-border">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-8 h-px bg-border" />
-            <span className="text-accent text-sm">✦</span>
-            <div className="w-8 h-px bg-border" />
-          </div>
-          <p className="text-foreground font-display text-lg font-semibold mb-1">
-            Hecho por Alejandro Gutiérrez
-          </p>
-          <p className="text-muted-foreground text-sm font-body">
-            Timeline Literario — Trabajo de Literatura
-          </p>
-        </motion.div>
+      <footer className="relative z-10 text-center py-16 border-t border-border">
+        <div className="flex items-center justify-center gap-3 mb-3">
+          <div className="w-8 h-px bg-border" />
+          <span className="text-muted-foreground/40 text-sm">✦</span>
+          <div className="w-8 h-px bg-border" />
+        </div>
+        <p className="text-muted-foreground text-sm font-body">
+          Timeline Literario — Trabajo de Literatura
+        </p>
       </footer>
     </div>
   );
