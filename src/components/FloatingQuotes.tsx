@@ -37,46 +37,32 @@ const FloatingQuotes = () => {
   const q = quotes[current];
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 max-w-xs hidden md:block">
+    <div className="fixed bottom-4 right-4 z-50 max-w-[220px] hidden md:block">
       <AnimatePresence mode="wait">
         <motion.div
           key={current}
-          initial={{ opacity: 0, y: 20, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -10, scale: 0.95 }}
-          transition={{ duration: 0.5 }}
-          className="bg-card/95 backdrop-blur-md border border-border rounded-xl p-5 shadow-lg cursor-pointer"
+          initial={{ opacity: 0, y: 12, scale: 0.95 }}
+          animate={{ opacity: 0.85, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -8, scale: 0.95 }}
+          transition={{ duration: 0.4 }}
+          className="bg-card/80 backdrop-blur-sm border border-border/50 rounded-lg p-3 shadow-md cursor-pointer hover:opacity-100 transition-opacity"
           onClick={() => setCurrent((prev) => (prev + 1) % quotes.length)}
         >
-          <Quote className="w-4 h-4 text-accent mb-2" />
-          <p className="font-display text-sm text-foreground italic leading-relaxed mb-3">
-            «{q.text}»
+          <p className="font-display text-[11px] text-foreground/80 italic leading-relaxed mb-1.5">
+            «{q.text.length > 80 ? q.text.slice(0, 80) + "…" : q.text}»
           </p>
           <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs font-semibold text-foreground">{q.author}</p>
-              <p className="text-xs text-muted-foreground">{q.work}</p>
-            </div>
+            <p className="text-[10px] text-muted-foreground">— {q.author}</p>
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 setIsVisible(false);
-                setTimeout(() => setIsVisible(true), 30000);
+                setTimeout(() => setIsVisible(true), 60000);
               }}
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors ml-3"
+              className="text-[10px] text-muted-foreground/50 hover:text-foreground transition-colors ml-2"
             >
               ✕
             </button>
-          </div>
-          <div className="flex gap-1 mt-3 justify-center">
-            {quotes.map((_, i) => (
-              <div
-                key={i}
-                className={`w-1 h-1 rounded-full transition-colors ${
-                  i === current ? "bg-accent" : "bg-border"
-                }`}
-              />
-            ))}
           </div>
         </motion.div>
       </AnimatePresence>
