@@ -79,6 +79,9 @@ const Index = () => {
         <p className="text-muted-foreground text-sm font-body">
           Timeline Literario — Trabajo de Literatura
         </p>
+        <p className="text-muted-foreground/60 text-xs font-body mt-2">
+          Hecho por Alejandro Gutiérrez
+        </p>
       </footer>
     </div>
   );
