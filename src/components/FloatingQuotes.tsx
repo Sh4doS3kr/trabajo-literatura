@@ -52,7 +52,7 @@ const FloatingQuotes = () => {
             «{q.text.length > 80 ? q.text.slice(0, 80) + "…" : q.text}»
           </p>
           <div className="flex items-center justify-between">
-            <p className="text-[10px] text-muted-foreground">— {q.author}</p>
+            <p className="text-[10px] text-muted-foreground">- {q.author}</p>
             <button
               onClick={(e) => {
                 e.stopPropagation();

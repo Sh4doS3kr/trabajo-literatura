@@ -77,7 +77,7 @@ const TimelineCard = ({
         </p>
 
         <button className="flex items-center gap-1.5 text-accent text-sm font-medium font-body transition-all hover:gap-2.5">
-          {expanded ? "Ocultar apuntes" : "Leer apuntes completos"}
+          {expanded ? "Ver menos" : "Ver más"}
           <ChevronDown
             className={`w-4 h-4 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
           />

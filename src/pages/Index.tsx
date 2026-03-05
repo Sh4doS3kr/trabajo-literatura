@@ -2,6 +2,7 @@ import Timeline from "@/components/Timeline";
 import FloatingQuotes from "@/components/FloatingQuotes";
 import FloatingParticles from "@/components/FloatingParticles";
 import ScrollProgress from "@/components/ScrollProgress";
+import FinalAnimation from "@/components/FinalAnimation";
 import { BookOpen, Scroll } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -49,7 +50,7 @@ const Index = () => {
             transition={{ delay: 1 }}
           >
             <BookOpen className="w-4 h-4" />
-            <span>Haz click en cada tarjeta para ver los apuntes</span>
+            <span>Haz scroll para ver el timeline</span>
           </motion.div>
 
           {/* Decorative bottom ornament */}
@@ -69,19 +70,19 @@ const Index = () => {
       {/* Floating quotes widget */}
       <FloatingQuotes />
 
-      {/* Footer */}
-      <footer className="relative z-10 text-center py-16 border-t border-border">
-        <div className="flex items-center justify-center gap-3 mb-3">
-          <div className="w-8 h-px bg-border" />
-          <span className="text-muted-foreground/40 text-sm">✦</span>
-          <div className="w-8 h-px bg-border" />
+      {/* Footer con animación guapa */}
+      <footer className="relative z-10">
+        <FinalAnimation />
+        
+        {/* Footer original simplificado */}
+        <div className="text-center py-8 border-t border-border bg-background/50 backdrop-blur-sm">
+          <p className="text-muted-foreground text-sm font-body">
+            Timeline Literario
+          </p>
+          <p className="text-muted-foreground/60 text-xs font-body mt-1">
+            Hecho por Alejandro Gutiérrez
+          </p>
         </div>
-        <p className="text-muted-foreground text-sm font-body">
-          Timeline Literario — Trabajo de Literatura
-        </p>
-        <p className="text-muted-foreground/60 text-xs font-body mt-2">
-          Hecho por Alejandro Gutiérrez
-        </p>
       </footer>
     </div>
   );
