@@ -156,13 +156,9 @@ const TimelineCard = ({
       <div className={`hidden md:flex w-full items-start ${side === "right" ? "flex-row-reverse" : ""}`}>
         <div className="w-[calc(50%-2.5rem)]">{cardContent()}</div>
         <div className="flex flex-col items-center w-20 relative pt-6">
-          {/* Ornamental connector */}
-          <div className="w-10 h-10 rounded-full bg-card border-2 border-accent/40 flex items-center justify-center z-10 shadow-sm">
-            <span className="font-display text-xs font-bold text-accent">{number}</span>
+          <div className="timeline-dot w-12 h-12 rounded-full flex items-center justify-center z-10 animate-pulse-glow">
+            <span className="font-display text-sm font-bold text-card">{number}</span>
           </div>
-          {index < 7 && (
-            <div className="w-px flex-1 min-h-[2rem] border-l border-dashed border-accent/20" />
-          )}
         </div>
         <div className="w-[calc(50%-2.5rem)]" />
       </div>
@@ -170,12 +166,9 @@ const TimelineCard = ({
       {/* Mobile */}
       <div className="md:hidden flex items-start w-full">
         <div className="flex flex-col items-center mr-3 pt-1">
-          <div className="w-8 h-8 rounded-full bg-card border-2 border-accent/40 flex items-center justify-center z-10 shadow-sm flex-shrink-0">
-            <span className="font-display text-[10px] font-bold text-accent">{number}</span>
+          <div className="timeline-dot w-8 h-8 rounded-full flex items-center justify-center z-10 animate-pulse-glow flex-shrink-0">
+            <span className="font-display text-[10px] font-bold text-card">{number}</span>
           </div>
-          {index < 7 && (
-            <div className="w-px flex-1 min-h-[1rem] border-l border-dashed border-accent/20" />
-          )}
         </div>
         <div className="flex-1">{cardContent(true)}</div>
       </div>

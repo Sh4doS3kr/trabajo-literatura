@@ -193,6 +193,11 @@ const timelineData = [
 const Timeline = () => {
   return (
     <section className="relative max-w-5xl mx-auto px-4 py-16">
+      {/* Continuous timeline line - desktop */}
+      <div className="hidden md:block absolute left-1/2 top-16 bottom-16 w-[2px] -translate-x-1/2 timeline-line-gradient rounded-full" />
+      {/* Continuous timeline line - mobile */}
+      <div className="md:hidden absolute left-[15px] top-16 bottom-16 w-[2px] timeline-line-gradient rounded-full" />
+
       {timelineData.map((item, i) => (
         <TimelineCard
           key={item.number}
